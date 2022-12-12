@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
 import android.util.Log
 
 import android.widget.Toast
@@ -19,6 +20,7 @@ import com.example.matholic.Utility.Constants.Companion.REQUEST_CAMERA
 import com.example.matholic.adapter.QuestionsAdapter
 import com.example.matholic.databinding.ActivityMainBinding
 import com.example.matholic.model.Question
+import com.example.matholic.model.QuestionResponse
 import com.example.matholic.repo.MainRepository
 import com.example.matholic.viewmodel.MainActivityViewModel
 import com.example.matholic.viewmodel.MainActivityViewModelFactory
@@ -90,6 +92,7 @@ class MainActivity : AppCompatActivity() {
                 val file = File(uri!!.path)
                 val bitmap = BitmapFactory.decodeFile(file.absolutePath)
                 val uuid = UUID.randomUUID().toString();
+
                 //save image
                 ImageWorker.to(this)
                     .directory("questions")
@@ -100,6 +103,10 @@ class MainActivity : AppCompatActivity() {
                 val path : String = filesDir.absolutePath.toString() + "/questions" + "/" + uuid + ".png"
                 val question = Question(uuid = uuid, "", path)
                 viewModel.saveQuestion(question)
+
+                //post question
+                viewModel.postQuestion(file, uuid)
+                onQuestionPosted(uuid)
                 updateData()
             }
         }
@@ -112,5 +119,23 @@ class MainActivity : AppCompatActivity() {
         viewModel.questions.observe(this, Observer {
             questions -> adapter.setAllData(questions)
         })
+    }
+
+    fun onQuestionPosted(uuid : String) {
+        viewModel.response.observe(this, Observer {
+            response ->
+                if(!response.isSuccessful) {
+                    Toast.makeText(this@MainActivity, "file could not posted", Toast.LENGTH_LONG)
+                } else {
+                    Toast.makeText(this@MainActivity, "Request is successfull, data will be updated", Toast.LENGTH_LONG)
+                    val expression = response.body()
+                    expression?.let{
+                        viewModel.updateQuestion(uuid, it.expression)
+                        updateData()
+                    }
+                }
+
+        })
+
     }
 }

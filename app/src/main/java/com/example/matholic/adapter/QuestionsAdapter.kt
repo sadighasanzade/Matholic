@@ -1,5 +1,6 @@
 package com.example.matholic.adapter
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,7 +11,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.matholic.R
+import com.example.matholic.Utility.Constants.Companion.IMAGE_KEY
+import com.example.matholic.Utility.Constants.Companion.KEY_EXP
 import com.example.matholic.model.Question
+import com.example.matholic.ui.FullScreenActivity
 import com.himanshurawat.imageworker.Extension
 import com.himanshurawat.imageworker.ImageWorker
 import java.io.File
@@ -48,6 +52,13 @@ class QuestionsAdapter : RecyclerView.Adapter<QuestionsAdapter.QuestionHolder>()
             .dontAnimate()
             .into(holder.question)
         holder.expression.setText(item.expression)
+
+        holder.question.setOnClickListener {
+            val intent = Intent(it.context, FullScreenActivity::class.java)
+            intent.putExtra(IMAGE_KEY, item.uuid)
+            intent.putExtra(KEY_EXP, item.expression)
+            it.context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int {

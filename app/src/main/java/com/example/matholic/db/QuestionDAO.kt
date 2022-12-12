@@ -14,4 +14,7 @@ interface QuestionDAO {
 
     @Query("SELECT * FROM question_table")
     fun getAllQuestions() : LiveData<List<Question>>
+
+    @Query("UPDATE question_table SET expression = :expression WHERE uuid = :uuid")
+    fun updateQuestion(uuid : String, expression : String)
 }
