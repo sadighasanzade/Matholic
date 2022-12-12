@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.example.matholic.R
 import com.example.matholic.Utility.Constants.Companion.IMAGE_KEY
 import com.example.matholic.Utility.Constants.Companion.KEY_EXP
+import com.example.matholic.Utility.Constants.Companion.QUESTION_DIR
 import com.example.matholic.model.Question
 import com.example.matholic.ui.FullScreenActivity
 import com.himanshurawat.imageworker.Extension
@@ -42,7 +43,7 @@ class QuestionsAdapter : RecyclerView.Adapter<QuestionsAdapter.QuestionHolder>()
     override fun onBindViewHolder(holder: QuestionHolder, position: Int) {
         val item = questionList.get(position)
         val bmp = ImageWorker.from(holder.itemView.context)
-            .directory("questions")
+            .directory(QUESTION_DIR)
             .setFileName(item.uuid)
             .withExtension(Extension.PNG)
             .load()

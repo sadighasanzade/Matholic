@@ -39,7 +39,7 @@ class MainActivityViewModel(private val repository: MainRepository, application:
             try{
                 response.value = repository.postQuestion(file, uuid)
             }catch (ex : Exception) {
-                Log.d("sado", "FAILED ")
+                Log.d("sado", "FAILED " + ex.toString())
             }
 
         }

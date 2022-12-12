@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.desmond.squarecamera.CameraActivity
+import com.example.matholic.Utility.Constants.Companion.QUESTION_DIR
 import com.example.matholic.Utility.Constants.Companion.REQUEST_CAMERA
 import com.example.matholic.adapter.QuestionsAdapter
 import com.example.matholic.databinding.ActivityMainBinding
@@ -95,7 +96,7 @@ class MainActivity : AppCompatActivity() {
 
                 //save image
                 ImageWorker.to(this)
-                    .directory("questions")
+                    .directory(QUESTION_DIR)
                     .setFileName(uuid)
                     .withExtension(Extension.PNG)
                     .save(bitmap, 80)
