@@ -1,5 +1,7 @@
 package com.example.matholic.adapter
 
+import android.graphics.Bitmap
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.matholic.R
 import com.example.matholic.model.Question
+import com.himanshurawat.imageworker.Extension
+import com.himanshurawat.imageworker.ImageWorker
 import java.io.File
 
 class QuestionsAdapter : RecyclerView.Adapter<QuestionsAdapter.QuestionHolder>() {
@@ -33,7 +37,16 @@ class QuestionsAdapter : RecyclerView.Adapter<QuestionsAdapter.QuestionHolder>()
 
     override fun onBindViewHolder(holder: QuestionHolder, position: Int) {
         val item = questionList.get(position)
-        Glide.with(holder.itemView.context).load(item.image).into(holder.question)
+        val bmp = ImageWorker.from(holder.itemView.context)
+            .directory("questions")
+            .setFileName(item.uuid)
+            .withExtension(Extension.PNG)
+            .load()
+
+
+        Glide.with(holder.itemView.context).load(bmp)
+            .dontAnimate()
+            .into(holder.question)
         holder.expression.setText(item.expression)
     }
 

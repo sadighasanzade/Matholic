@@ -16,7 +16,7 @@ class MainActivityViewModel(private val repository: MainRepository, application:
         repository.dbController = questionDAO
     }
 
-    fun saveQuestion(question: Question) =  {
+    fun saveQuestion(question: Question)  {
         viewModelScope.launch {
             repository.addQuestion(question)
         }
