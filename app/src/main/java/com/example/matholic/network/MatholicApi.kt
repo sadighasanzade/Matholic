@@ -12,7 +12,7 @@ import retrofit2.http.Part
 interface MatholicApi {
 
     @Multipart
-    @POST("api/upload/")
+    @POST("uploadfile/")
     suspend fun postQuestion(
         @Part image : MultipartBody.Part,
         @Part("uuid") uuid : RequestBody

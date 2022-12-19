@@ -29,7 +29,7 @@ class MainRepository{
 
     suspend fun postQuestion(file : File, uuid : String) : Response<QuestionResponse> {
         val filePart = MultipartBody.Part.createFormData(
-            "image",
+            "file",
             file.name,
             RequestBody.create(MediaType.parse("image/*"), file)
         )

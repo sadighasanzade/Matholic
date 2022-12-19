@@ -12,6 +12,7 @@ import android.util.Log
 
 import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -90,7 +91,7 @@ class MainActivity : AppCompatActivity() {
         when(requestCode) {
             REQUEST_CAMERA -> {
                 val uri = data!!.data
-                val file = File(uri!!.path)
+                val file = File(uri?.path)
                 val bitmap = BitmapFactory.decodeFile(file.absolutePath)
                 val uuid = UUID.randomUUID().toString();
 
@@ -108,7 +109,6 @@ class MainActivity : AppCompatActivity() {
                 //post question
                 viewModel.postQuestion(file, uuid)
                 onQuestionPosted(uuid)
-                updateData()
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
@@ -132,6 +132,7 @@ class MainActivity : AppCompatActivity() {
                     val expression = response.body()
                     expression?.let{
                         viewModel.updateQuestion(uuid, it.expression)
+                        viewModel.response = MutableLiveData()
                         updateData()
                     }
                 }
