@@ -51,4 +51,10 @@ class MainActivityViewModel(private val repository: MainRepository, application:
         }
     }
 
+    fun updateBaseUrl() {
+        viewModelScope.launch {
+            repository.updateBaseUrl()
+        }
+    }
+
 }

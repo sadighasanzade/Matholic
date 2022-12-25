@@ -1,14 +1,19 @@
 package com.example.matholic
 
 import android.Manifest
+import android.app.AlertDialog
 import android.app.Application
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
 import android.util.Log
+import android.widget.EditText
 
 import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
@@ -17,6 +22,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.desmond.squarecamera.CameraActivity
+import com.example.matholic.Utility.Constants.Companion.BASE_URL
 import com.example.matholic.Utility.Constants.Companion.QUESTION_DIR
 import com.example.matholic.Utility.Constants.Companion.REQUEST_CAMERA
 import com.example.matholic.adapter.QuestionsAdapter
@@ -49,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
+        Preferences.init(this@MainActivity)
         adapter = QuestionsAdapter()
         binding.itemList.layoutManager = LinearLayoutManager(this)
         binding.itemList.adapter = adapter
@@ -62,7 +68,7 @@ class MainActivity : AppCompatActivity() {
                 .withPermission(Manifest.permission.CAMERA)
                 .withListener(object : PermissionListener{
                     override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                        Toast.makeText(it.context, "You need to give permission to take picture", Toast.LENGTH_LONG)
+                        Toast.makeText(it.context, "You need to give permission to take picture", Toast.LENGTH_LONG).show()
                     }
 
                     override fun onPermissionRationaleShouldBeShown(
@@ -80,6 +86,32 @@ class MainActivity : AppCompatActivity() {
                 .check()
         }
 
+        //open ip dialog
+        binding.settings.setOnClickListener {
+            val editText = EditText(it.context)
+            val dialog = AlertDialog.Builder(it.context)
+                .setTitle("IP configuration")
+                .setMessage("enter new IP address")
+                .setView(editText)
+            dialog.setPositiveButton("Ok") {
+                    d,i ->
+               run {
+                    val ip = editText.text?.toString()
+                    Preferences.set(Preferences.IP, ip)
+                   Toast.makeText(this@MainActivity, "Restart app to get ip", Toast.LENGTH_LONG).show()
+                   Handler().postDelayed(Runnable { finish() }, 1000)
+                    d.dismiss()
+                }
+                }
+
+            dialog.setNegativeButton("close") {dialog, which ->
+                run {
+                    dialog.dismiss()
+                }
+            }
+
+            dialog.show()
+        }
         updateData()
     }
 
@@ -138,6 +170,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
         })
-
     }
+
+
 }

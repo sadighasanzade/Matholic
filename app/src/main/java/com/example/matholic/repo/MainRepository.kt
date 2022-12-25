@@ -15,7 +15,7 @@ import java.io.File
 
 
 class MainRepository{
-    val networkController = RetrofitInstance.api
+    var networkController = RetrofitInstance.api
     lateinit var dbController: QuestionDAO
 
 
@@ -40,5 +40,10 @@ class MainRepository{
 
     suspend fun updateQuestion(uuid: String, expression : String) {
         dbController.updateQuestion(uuid, expression)
+
+    }
+
+    suspend fun updateBaseUrl() {
+        
     }
 }
